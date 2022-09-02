@@ -4,6 +4,12 @@ namespace App;
 
 class Csv
 {
+
+  private $columns = [
+    'Rates' => 3,
+    'Taxes' => 4,
+  ];
+
   private $csv = [];
   private $rates = 0;
   private $taxes = 0;
@@ -21,11 +27,20 @@ class Csv
 
   public function computeTotals(): void
   {
-    foreach($this->csv as $row) {
-      $this->taxes += (int) $row[3];
-      $this->rates += (int) $row[4];
-      $this->total += (int) $row[3] + (int) $row[4];
+
+    for ($i=1; $i < count($this->csv); $i++) { 
+
+      //$this->taxes += (int) $row[3];
+      //$this->rates += (int) $row[4];
+
+      $row = $this->csv[$i];
+      
+      $this->rates += (int) $row[$this->columns['Rates']];
+      $this->taxes += (int) $row[$this->columns['Taxes']];
+      //$this->total += (int) $row[$this->columns['Rates']] + (int) $row[$this->columns['Taxes']];
     }
+    
+    $this->total = $this->rates + $this->taxes;
 
     array_push($this->csv, ['', '', 'Subtotal', $this->rates, '']);
     array_push($this->csv, ['', '', 'Total', $this->total, '']);
